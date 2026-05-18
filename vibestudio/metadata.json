@@ -1,0 +1,8 @@
+{
+  "name": "VibeStudio",
+  "description": "A high-end design visualization tool for developers to help clients choose themes, colors, and typography through live interactive mobile mockups.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
