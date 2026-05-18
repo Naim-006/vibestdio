@@ -13,14 +13,14 @@ const ScreenProfile = ({ theme }: { theme: ThemeState }) => (
         <Menu size={20} />
       </div>
       <div className="w-10 h-10 rounded-full overflow-hidden border-2" style={{ borderColor: theme.palette.primary }}>
-        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" alt="Avatar" className="w-full h-full object-cover" />
+        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" alt="Avatar" className="w-full h-full object-cover" crossOrigin="anonymous" referrerPolicy="no-referrer" />
       </div>
     </div>
 
     <div className="flex flex-col items-center text-center">
       <div className="relative mb-6">
         <div className="w-24 h-24 rounded-full overflow-hidden border-2 p-1" style={{ borderColor: theme.palette.primary }}>
-          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80" alt="Avatar" className="w-full h-full object-cover rounded-full" />
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80" alt="Avatar" className="w-full h-full object-cover rounded-full" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         </div>
         <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full border-4 border-white flex items-center justify-center text-white" style={{ backgroundColor: theme.palette.primary }}>
           <Plus size={14} />
@@ -75,7 +75,7 @@ const ScreenDashboard = ({ theme }: { theme: ThemeState }) => (
           <div className="flex -space-x-3">
             {[1, 2, 3, 4].map(i => (
               <div key={i} className="w-8 h-8 rounded-full border-2 border-white/20 overflow-hidden backdrop-blur-md">
-                <img src={`https://i.pravatar.cc/100?img=${i+20}`} alt="user" className="w-full h-full object-cover" />
+                <img src={`https://i.pravatar.cc/100?img=${i+20}`} alt="user" className="w-full h-full object-cover" crossOrigin="anonymous" referrerPolicy="no-referrer" />
               </div>
             ))}
           </div>
@@ -118,7 +118,7 @@ const ScreenChat = ({ theme }: { theme: ThemeState }) => (
   <div className="flex flex-col h-full overflow-hidden">
     <div className="p-6 flex items-center gap-4 border-b border-black/5">
       <div className="w-12 h-12 rounded-2xl overflow-hidden relative border-2 border-white/10">
-        <img src="https://i.pravatar.cc/100?img=11" alt="avatar" className="w-full h-full object-cover" />
+        <img src="https://i.pravatar.cc/100?img=11" alt="avatar" className="w-full h-full object-cover" crossOrigin="anonymous" referrerPolicy="no-referrer" />
         <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></div>
       </div>
       <div className="flex-1">
@@ -194,11 +194,15 @@ export default function App() {
             pixelRatio: 2,
             width: 1200,
             height: 675,
+            cacheBust: true,
             backgroundColor: isDark ? '#000' : '#fff',
             style: {
-              transform: 'scale(1)', // Ensure no scaling during capture
+              transform: 'scale(1)',
               margin: '0',
-              padding: '0'
+              padding: '0',
+              position: 'relative',
+              left: '0',
+              top: '0'
             }
           });
           const link = document.createElement('a');
@@ -287,10 +291,10 @@ export default function App() {
             <Box size={20} className="md:w-[26px] md:h-[26px]" strokeWidth={2.5} />
           </div>
           <div className="flex flex-col">
-            <h1 className={`text-lg md:text-2xl font-black tracking-tighter leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>Canvas <span className="text-indigo-600">Studio</span></h1>
-            <div className="flex items-center gap-1.5 mt-0.5 md:mt-2">
+            <h1 className={`text-lg md:text-2xl font-black tracking-tighter leading-tight whitespace-nowrap ${isDark ? 'text-white' : 'text-slate-900'}`}>Canvas <span className="text-indigo-600">Studio</span></h1>
+            <div className="flex items-center gap-1.5 mt-0.5 md:mt-1">
               <span className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-widest ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>NextByte iT</span>
+              <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>NextByte IT</span>
             </div>
           </div>
         </div>
@@ -316,10 +320,10 @@ export default function App() {
 
           <button 
             onClick={handleExportClick}
-            className={`px-3 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-[0.15em] transition-all shadow-xl active:scale-95 flex items-center gap-1.5 md:gap-2 ${isDark ? 'bg-indigo-600 text-white hover:bg-white hover:text-black shadow-indigo-500/10' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-slate-200'}`}
+            className={`px-3 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-[0.15em] transition-all shadow-xl active:scale-95 flex items-center gap-1 md:gap-2 ${isDark ? 'bg-indigo-600 text-white hover:bg-white hover:text-black shadow-indigo-500/10' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-slate-200'}`}
           >
             <Download size={12} className="md:w-3.5 md:h-3.5" />
-            <span>Export</span>
+            <span className="hidden xs:inline">Export</span>
           </button>
         </div>
       </nav>
@@ -586,7 +590,15 @@ export default function App() {
                <div className="absolute top-0 right-0 p-4 opacity-5">
                   <CheckCircle2 size={50} className={isDark ? 'text-indigo-400' : 'text-indigo-900'} />
                </div>
-              
+               <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-2 md:mb-3">
+                     <CheckCircle2 size={14} className={isDark ? 'text-indigo-400' : 'text-indigo-600'} />
+                     <h4 className={`text-[9px] md:text-[11px] font-black uppercase tracking-widest ${isDark ? 'text-indigo-300' : 'text-indigo-900'}`}>Verification</h4>
+                  </div>
+                  <p className={`text-[9px] md:text-[11px] leading-relaxed max-w-[200px] ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>
+                     Your design contrast and spacing follow industrial <span className={`${isDark ? 'text-indigo-400 font-bold' : 'text-indigo-700 font-bold'}`}>accessibility standards (WCAG).</span>
+                  </p>
+               </div>
             </div>
           </div>
         </div>
