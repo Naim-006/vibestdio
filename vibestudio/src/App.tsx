@@ -579,15 +579,7 @@ export default function App() {
                <div className="absolute top-0 right-0 p-4 opacity-5">
                   <CheckCircle2 size={60} className={isDark ? 'text-indigo-400' : 'text-indigo-900'} />
                </div>
-               <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-3">
-                     <CheckCircle2 size={16} className={isDark ? 'text-indigo-400' : 'text-indigo-600'} />
-                     <h4 className={`text-[11px] font-black uppercase tracking-widest ${isDark ? 'text-indigo-300' : 'text-indigo-900'}`}>Verification Score</h4>
-                  </div>
-                  <p className={`text-[11px] leading-relaxed max-w-[200px] ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>
-                     Your design contrast and spacing follow industrial <span className={`${isDark ? 'text-indigo-400 font-bold' : 'text-indigo-700 font-bold'}`}>accessibility standards (WCAG).</span>
-                  </p>
-               </div>
+              
             </div>
           </div>
         </div>
