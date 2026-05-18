@@ -188,10 +188,18 @@ export default function App() {
     setTimeout(async () => {
       if (showcaseRef.current) {
         try {
+          // Explicitly set width and height for reliable capture
           const dataUrl = await toPng(showcaseRef.current, {
             quality: 1,
             pixelRatio: 2,
-            backgroundColor: isDark ? '#000' : '#fff'
+            width: 1200,
+            height: 675,
+            backgroundColor: isDark ? '#000' : '#fff',
+            style: {
+              transform: 'scale(1)', // Ensure no scaling during capture
+              margin: '0',
+              padding: '0'
+            }
           });
           const link = document.createElement('a');
           link.download = `canvas-studio-export-${Date.now()}.png`;
@@ -199,12 +207,13 @@ export default function App() {
           link.click();
         } catch (err) {
           console.error('Export failed', err);
+          alert('Export failed. Please try again.');
         } finally {
           setIsExporting(false);
           setVerificationCode('');
         }
       }
-    }, 800);
+    }, 1500); // Increased timeout to ensure full mount
   };
 
   const handleExportClick = () => {
@@ -272,61 +281,58 @@ export default function App() {
   return (
     <div className={`flex flex-col min-h-screen overflow-x-hidden font-sans selection:bg-indigo-500/30 transition-colors duration-500 ${isDark ? 'bg-[#0a0a0c] text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
       {/* Premium Navigation Header */}
-      <nav className={`fixed top-0 left-0 right-0 h-20 md:h-24 backdrop-blur-2xl border-b z-[100] px-6 md:px-12 flex items-center justify-between shadow-sm transition-colors duration-500 ${isDark ? 'bg-black/80 border-white/5' : 'bg-white/80 border-slate-200'}`}>
-        <div className="flex items-center gap-5">
-          <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-[0_8px_30px_rgba(79,70,229,0.3)]">
-            <Box size={26} strokeWidth={2.5} />
+      <nav className={`fixed top-0 left-0 right-0 h-16 md:h-24 backdrop-blur-2xl border-b z-[100] px-4 md:px-12 flex items-center justify-between shadow-sm transition-colors duration-500 ${isDark ? 'bg-black/80 border-white/5' : 'bg-white/80 border-slate-200'}`}>
+        <div className="flex items-center gap-3 md:gap-5">
+          <div className="w-9 h-9 md:w-12 md:h-12 bg-indigo-600 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-[0_8px_30px_rgba(79,70,229,0.3)]">
+            <Box size={20} className="md:w-[26px] md:h-[26px]" strokeWidth={2.5} />
           </div>
           <div className="flex flex-col">
-            <h1 className={`text-xl md:text-2xl font-black tracking-tighter ${isDark ? 'text-white' : 'text-slate-900'}`}>Canvas <span className="text-indigo-600 ml-1">Studio</span></h1>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className={`text-[10px] font-black uppercase tracking-widest ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Workspace Ready</span>
+            <h1 className={`text-lg md:text-2xl font-black tracking-tighter leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>Canvas <span className="text-indigo-600">Studio</span></h1>
+            <div className="flex items-center gap-1.5 mt-0.5 md:mt-2">
+              <span className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-widest ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>NextByte iT</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-4 md:gap-8">
+        <div className="flex items-center gap-2 md:gap-8">
           <a
             href="https://nextbyte-it.netlify.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group hidden md:flex flex-col items-end hover:opacity-80 transition-all mr-4"
+            className="group hidden sm:flex flex-col items-end hover:opacity-80 transition-all mr-2 md:mr-4"
           >
-            <span className={`text-[9px] font-black uppercase tracking-widest mb-1 group-hover:text-indigo-600 transition-colors ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Strategic Partner</span>
-            <div className="flex items-center gap-3">
-              <span className={`text-xs font-black transition-colors ${isDark ? 'text-slate-400 group-hover:text-white' : 'text-slate-500 group-hover:text-slate-900'}`}>NEXTBYTE IT</span>
-              <div className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-all ${isDark ? 'bg-white/5 border-white/5 text-slate-500 group-hover:text-indigo-400' : 'bg-slate-100 border-slate-200 text-slate-400 group-hover:text-indigo-600'}`}>
-                <ExternalLink size={14} />
-              </div>
+            <span className={`text-[8px] md:text-[9px] font-black uppercase tracking-widest mb-0.5 md:mb-1 group-hover:text-indigo-600 transition-colors ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Strategic Partner</span>
+            <div className="flex items-center gap-2 md:gap-3">
+              <span className={`text-[10px] md:text-xs font-black transition-colors ${isDark ? 'text-slate-400 group-hover:text-white' : 'text-slate-500 group-hover:text-slate-900'}`}>NEXTBYTE IT</span>
             </div>
           </a>
           <button 
             onClick={() => setIsDark(!isDark)}
-            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${isDark ? 'bg-white/10 text-yellow-400 hover:bg-white/20' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+            className={`w-9 h-9 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center transition-all ${isDark ? 'bg-white/10 text-yellow-400 hover:bg-white/20' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
           >
-            {isDark ? <Sparkles size={20} /> : <Moon size={20} />}
+            {isDark ? <Sparkles size={16} className="md:w-5 md:h-5" /> : <Moon size={16} className="md:w-5 md:h-5" />}
           </button>
 
           <button 
             onClick={handleExportClick}
-            className={`px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-[0.15em] transition-all shadow-xl active:scale-95 flex items-center gap-2 ${isDark ? 'bg-indigo-600 text-white hover:bg-white hover:text-black shadow-indigo-500/10' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-slate-200'}`}
+            className={`px-3 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-[0.15em] transition-all shadow-xl active:scale-95 flex items-center gap-1.5 md:gap-2 ${isDark ? 'bg-indigo-600 text-white hover:bg-white hover:text-black shadow-indigo-500/10' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-slate-200'}`}
           >
-            <Download size={14} />
-            <span>Export Design</span>
+            <Download size={12} className="md:w-3.5 md:h-3.5" />
+            <span>Export</span>
           </button>
         </div>
       </nav>
 
       {/* Main Experience Layout */}
-      <main className="flex-1 mt-20 md:mt-24 p-4 md:p-12 lg:grid lg:grid-cols-12 lg:gap-12 max-w-[1920px] mx-auto w-full">
+      <main className="flex-1 mt-16 md:mt-24 p-4 md:p-8 lg:p-12 lg:grid lg:grid-cols-12 lg:gap-12 max-w-[1920px] mx-auto w-full">
            {/* left: System Controls */}
-        <div className="col-span-12 lg:col-span-3 flex flex-col gap-6 mb-8 lg:mb-0">
+        <div className="col-span-12 lg:col-span-3 flex flex-col gap-6 mb-8 lg:mb-0 order-2 lg:order-1">
           
           {/* Palette Foundry Tile */}
-          <div className={`border rounded-[3rem] p-8 flex flex-col min-h-0 min-h-[500px] lg:min-h-0 overflow-hidden shadow-xl transition-colors duration-500 ${isDark ? 'bg-[#121216] border-white/5 shadow-black/50' : 'bg-white border-slate-200 shadow-slate-200/50'}`}>
-            <div className="flex items-center justify-between mb-8">
-              <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] italic ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Shared Themes</h3>
+          <div className={`border rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-8 flex flex-col min-h-0 lg:min-h-[500px] overflow-hidden shadow-xl transition-colors duration-500 ${isDark ? 'bg-[#121216] border-white/5 shadow-black/50' : 'bg-white border-slate-200 shadow-slate-200/50'}`}>
+            <div className="flex items-center justify-between mb-6 md:mb-8">
+              <h3 className={`text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] italic ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Shared Themes</h3>
               <PaletteIcon size={18} className={isDark ? 'text-slate-600' : 'text-slate-300'} />
             </div>
             
@@ -388,9 +394,9 @@ export default function App() {
         </div>
 
         {/* center: Device Preview Experience */}
-        <div className="col-span-12 lg:col-span-6 flex flex-col items-center justify-center min-h-[800px] lg:min-h-0 relative py-12 lg:py-0 mb-8 lg:mb-0">
+        <div className="col-span-12 lg:col-span-6 flex flex-col items-center justify-center min-h-[700px] lg:min-h-0 relative py-8 lg:py-0 order-1 lg:order-2">
           {/* Experience Switcher */}
-          <div className={`mb-16 border backdrop-blur-3xl p-2 rounded-full flex gap-2 shadow-2xl z-50 transition-all duration-500 ${isDark ? 'bg-white/5 border-white/5 shadow-black/40' : 'bg-white/60 border-slate-200 shadow-slate-200/50'}`}>
+          <div className={`mb-8 md:mb-16 border backdrop-blur-3xl p-1.5 md:p-2 rounded-full flex gap-1 md:gap-2 shadow-2xl z-50 transition-all duration-500 ${isDark ? 'bg-white/5 border-white/5 shadow-black/40' : 'bg-white/60 border-slate-200 shadow-slate-200/50'}`}>
             {[
               { id: 'dashboard', icon: Layout, label: 'Overview' },
               { id: 'chat', icon: MessageCircle, label: 'Messages' },
@@ -399,16 +405,17 @@ export default function App() {
               <button
                 key={screen.id}
                 onClick={() => setActiveScreen(screen.id as any)}
-                className={`flex items-center gap-3 px-8 py-3.5 rounded-full transition-all duration-500 font-black text-[10px] uppercase tracking-widest ${activeScreen === screen.id ? (isDark ? 'bg-indigo-600 text-white shadow-indigo-500/20 shadow-xl' : 'bg-slate-900 text-white shadow-xl scale-105') : (isDark ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-900')}`}
+                className={`flex items-center gap-2 md:gap-3 px-4 md:px-8 py-2.5 md:py-3.5 rounded-full transition-all duration-500 font-black text-[10px] uppercase tracking-widest ${activeScreen === screen.id ? (isDark ? 'bg-indigo-600 text-white shadow-indigo-500/20 shadow-xl' : 'bg-slate-900 text-white shadow-xl md:scale-105') : (isDark ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-900')}`}
               >
-                <screen.icon size={14} strokeWidth={2.5} />
+                <screen.icon size={12} className="md:w-[14px] md:h-[14px]" strokeWidth={2.5} />
                 <span className="hidden sm:inline">{screen.label}</span>
+                <span className="sm:hidden text-[8px]">{screen.label === 'Overview' ? 'HUB' : screen.label[0]}</span>
               </button>
             ))}
           </div>
 
-          {/* Premium Device Frame - Refined Alignment */}
-          <div ref={screenshotRef} className="relative group flex items-center justify-center w-full max-w-[450px]">
+          {/* Premium Device Frame - Refined Scaling for Mobile */}
+          <div ref={screenshotRef} className="relative group flex items-center justify-center w-full max-w-[450px] scale-[0.8] sm:scale-[0.9] md:scale-100 origin-center transition-transform duration-500">
              {/* Floating Glow - Dynamic based on primary color */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full blur-[140px] opacity-20 pointer-events-none -z-10 rounded-full transition-all duration-1000" style={{ backgroundColor: theme.palette.primary }}></div>
 
@@ -480,38 +487,38 @@ export default function App() {
         </div>
 
         {/* right: Visual Specs Controls */}
-        <div className="col-span-12 lg:col-span-3 flex flex-col gap-6">
+        <div className="col-span-12 lg:col-span-3 flex flex-col gap-6 order-3">
           
           {/* Typography Foundry Tile */}
-          <div className={`border rounded-[3rem] p-8 shadow-xl transition-all duration-500 ${isDark ? 'bg-[#121216] border-white/5 shadow-black/50' : 'bg-white border-slate-200 shadow-slate-200/50'}`}>
-            <div className="flex items-center justify-between mb-8">
-              <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Typography</h3>
-              <Type size={18} className={isDark ? 'text-slate-600' : 'text-slate-300'} />
+          <div className={`border rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-8 shadow-xl transition-all duration-500 ${isDark ? 'bg-[#121216] border-white/5 shadow-black/50' : 'bg-white border-slate-200 shadow-slate-200/50'}`}>
+            <div className="flex items-center justify-between mb-6 md:mb-8 font-black uppercase">
+              <h3 className={`text-[9px] md:text-[10px] tracking-[0.2em] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Typography</h3>
+              <Type size={16} className={isDark ? 'text-slate-600' : 'text-slate-300'} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 lg:grid-cols-2 gap-3 md:gap-4">
               {FONTS.map((f) => (
                 <button
                   key={f.id}
                   onClick={() => setTheme({ ...theme, font: f })}
-                  className={`p-6 rounded-[2.2rem] text-left transition-all duration-500 border-2 ${theme.font.id === f.id ? (isDark ? 'bg-indigo-600 border-indigo-500 text-white shadow-xl shadow-indigo-500/20' : 'bg-slate-900 border-slate-900 text-white shadow-xl scale-105') : (isDark ? 'bg-white/5 text-slate-500 border-transparent hover:border-white/10 hover:text-slate-300' : 'bg-slate-50 text-slate-500 border-transparent hover:border-slate-200')}`}
+                  className={`p-4 md:p-6 rounded-[1.8rem] md:rounded-[2.2rem] text-left transition-all duration-500 border-2 ${theme.font.id === f.id ? (isDark ? 'bg-indigo-600 border-indigo-500 text-white shadow-xl shadow-indigo-500/20' : 'bg-slate-900 border-slate-900 text-white shadow-xl scale-105') : (isDark ? 'bg-white/5 text-slate-500 border-transparent hover:border-white/10 hover:text-slate-300' : 'bg-slate-100/50 text-slate-500 border-transparent hover:border-slate-200')}`}
                 >
-                  <div className="text-3xl font-black mb-1" style={{ fontFamily: f.family }}>Aa</div>
-                  <div className="text-[9px] font-black truncate uppercase tracking-tighter opacity-60">{f.name}</div>
+                  <div className="text-2xl md:text-3xl font-black mb-1" style={{ fontFamily: f.family }}>Aa</div>
+                  <div className="text-[8px] md:text-[9px] font-black truncate uppercase tracking-tighter opacity-60">{f.name}</div>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Aesthetic Parameters Tile */}
-          <div className={`flex-1 border rounded-[3rem] p-8 flex flex-col gap-10 shadow-xl transition-all duration-500 ${isDark ? 'bg-[#121216] border-white/5 shadow-black/50' : 'bg-white border-slate-200 shadow-slate-200/50'}`}>
+          <div className={`flex-1 border rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-8 flex flex-col gap-8 md:gap-10 shadow-xl transition-all duration-500 ${isDark ? 'bg-[#121216] border-white/5 shadow-black/50' : 'bg-white border-slate-200 shadow-slate-200/50'}`}>
             <div>
-              <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-10 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Design Settings</h3>
+              <h3 className={`text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-8 md:mb-10 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Design Settings</h3>
               
-              <div className="space-y-12">
+              <div className="space-y-10 md:space-y-12">
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <label className={`text-[10px] font-black uppercase tracking-widest italic ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>Corner Rounding</label>
-                    <span className={`text-[10px] font-mono font-bold ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>{theme.borderRadius}px</span>
+                    <label className={`text-[9px] md:text-[10px] font-black uppercase tracking-widest italic ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>Corner Rounding</label>
+                    <span className={`text-[9px] md:text-[10px] font-mono font-bold ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>{theme.borderRadius}px</span>
                   </div>
                   <input
                     type="range"
@@ -519,13 +526,13 @@ export default function App() {
                     max="48"
                     value={theme.borderRadius}
                     onChange={(e) => setTheme({ ...theme, borderRadius: parseInt(e.target.value) })}
-                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                    className="w-full h-1.5 bg-slate-200 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                   />
                 </div>
 
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                    <label className={`text-[10px] font-black uppercase tracking-widest italic ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>Color Palette</label>
+                    <label className={`text-[9px] md:text-[10px] font-black uppercase tracking-widest italic ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>Color Palette</label>
                     <div className="flex gap-1.5">
                        {['primary', 'background', 'surface', 'text'].map(c => (
                          <div key={c} className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: (theme.palette as any)[c] }} />
@@ -539,9 +546,9 @@ export default function App() {
                       { key: 'surface', label: 'Layer' },
                       { key: 'text', label: 'Ink' }
                     ].map((color) => (
-                      <div key={color.key} className={`p-3.5 rounded-2xl flex flex-col gap-2.5 transition-all border ${isDark ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-slate-50 border-slate-100 hover:border-slate-200'}`}>
-                        <span className="text-[9px] font-black uppercase tracking-[0.1em] opacity-40">{color.label}</span>
-                        <div className="flex items-center gap-3">
+                      <div key={color.key} className={`p-3 md:p-3.5 rounded-2xl flex flex-col gap-2 transition-all border ${isDark ? 'bg-white/5 border-white/5 hover:bg-white/10' : 'bg-slate-50 border-slate-100 hover:border-slate-200'}`}>
+                        <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.1em] opacity-40">{color.label}</span>
+                        <div className="flex items-center gap-2 md:gap-3">
                           <input 
                             type="color" 
                             value={(theme.palette as any)[color.key]} 
@@ -549,9 +556,9 @@ export default function App() {
                               ...theme,
                               palette: { ...theme.palette, [color.key]: e.target.value }
                             })}
-                            className="w-7 h-7 rounded-lg bg-transparent border-none cursor-pointer p-0 overflow-hidden"
+                            className="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-transparent border-none cursor-pointer p-0 overflow-hidden"
                           />
-                          <span className="text-[10px] font-mono font-bold uppercase truncate opacity-60">{(theme.palette as any)[color.key]}</span>
+                          <span className="text-[8px] md:text-[10px] font-mono font-bold uppercase truncate opacity-60">{(theme.palette as any)[color.key]}</span>
                         </div>
                       </div>
                     ))}
@@ -559,13 +566,13 @@ export default function App() {
                 </div>
 
                 <div>
-                  <label className={`text-[10px] font-black uppercase mb-6 block tracking-widest italic ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>Style Direction</label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <label className={`text-[9px] md:text-[10px] font-black uppercase mb-6 block tracking-widest italic ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>Style Direction</label>
+                  <div className="grid grid-cols-2 gap-2 md:gap-3">
                     {['minimal', 'playful', 'premium', 'brutal'].map((v) => (
                       <button
                         key={v}
                         onClick={() => setTheme({ ...theme, vibe: v as any })}
-                        className={`px-4 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.15em] transition-all border-2 ${theme.vibe === v ? 'bg-indigo-600 text-white border-indigo-600 shadow-xl' : (isDark ? 'bg-white/5 border-transparent text-slate-500 hover:border-white/10' : 'bg-slate-50 border-transparent text-slate-500 hover:border-slate-200')}`}
+                        className={`px-3 py-3 md:py-4 rounded-xl md:rounded-[1.5rem] text-[9px] md:text-[10px] font-black uppercase tracking-[0.15em] transition-all border-2 ${theme.vibe === v ? 'bg-indigo-600 text-white border-indigo-600 shadow-xl' : (isDark ? 'bg-white/5 border-transparent text-slate-500 hover:border-white/10' : 'bg-slate-100/50 border-transparent text-slate-500 hover:border-slate-200')}`}
                       >
                         {v}
                       </button>
@@ -575,9 +582,9 @@ export default function App() {
               </div>
             </div>
 
-            <div className={`mt-auto p-8 rounded-[2.5rem] relative overflow-hidden group border transition-all duration-500 ${isDark ? 'bg-indigo-500/5 border-indigo-500/20 shadow-inner' : 'bg-indigo-50 border-indigo-100 shadow-sm'}`}>
+            <div className={`mt-auto p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] relative overflow-hidden group border transition-all duration-500 ${isDark ? 'bg-indigo-500/5 border-indigo-500/20 shadow-inner' : 'bg-indigo-50 border-indigo-100 shadow-sm'}`}>
                <div className="absolute top-0 right-0 p-4 opacity-5">
-                  <CheckCircle2 size={60} className={isDark ? 'text-indigo-400' : 'text-indigo-900'} />
+                  <CheckCircle2 size={50} className={isDark ? 'text-indigo-400' : 'text-indigo-900'} />
                </div>
               
             </div>
@@ -586,39 +593,39 @@ export default function App() {
       </main>
 
       {/* Footer Branding */}
-      <footer className={`mt-12 px-12 py-16 border-t flex flex-col items-center gap-12 transition-colors duration-500 ${isDark ? 'bg-black border-white/5' : 'bg-white border-slate-200'}`}>
-         <div className="flex flex-col md:flex-row items-center gap-12 md:gap-32">
+      <footer className={`mt-12 px-6 py-12 md:px-12 md:py-16 border-t flex flex-col items-center gap-10 md:gap-12 transition-colors duration-500 ${isDark ? 'bg-black border-white/5' : 'bg-white border-slate-200'}`}>
+         <div className="flex flex-col md:flex-row items-center gap-10 md:gap-24 lg:gap-32 w-full justify-center">
             <div className="flex flex-col items-center gap-1">
-               <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>Engine</span>
-               <span className={`text-xs font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>Canvas Studio Workspace</span>
+               <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>Engine</span>
+               <span className={`text-[10px] md:text-sm font-black text-center ${isDark ? 'text-white' : 'text-slate-900'}`}>Canvas Studio Workspace</span>
             </div>
             <div className="flex flex-col items-center gap-1">
-               <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>Network</span>
-               <span className={`text-xs font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>Global High-Speed Architecture</span>
+               <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>Network</span>
+               <span className={`text-[10px] md:text-sm font-black text-center ${isDark ? 'text-white' : 'text-slate-900'}`}>Global High-Speed Architecture</span>
             </div>
             <div className="flex flex-col items-center gap-8 md:gap-12 md:flex-row">
                <div className="flex flex-col items-center md:items-start gap-1">
-                  <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>Development</span>
-                  <span className={`text-xs font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>Grade Synthesis System</span>
+                  <span className={`text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>Development</span>
+                  <span className={`text-[10px] md:text-sm font-black text-center ${isDark ? 'text-white' : 'text-slate-900'}`}>Grade Synthesis System</span>
                </div>
                <div className="h-8 w-px bg-slate-200 dark:bg-white/10 hidden md:block"></div>
                <a 
                  href="https://nextbyte-it.netlify.app/"
                  target="_blank"
                  rel="noopener noreferrer"
-                 className="group flex items-center gap-5 scale-110"
+                 className="group flex items-center gap-4 transition-transform hover:scale-105"
                >
                  <div className="flex flex-col items-end">
-                   <span className={`text-[11px] font-black uppercase tracking-[0.2em] ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>Strategic Partner</span>
-                   <span className={`text-sm font-black transition-colors ${isDark ? 'text-slate-400 group-hover:text-white' : 'text-slate-500 group-hover:text-slate-900'}`}>NEXTBYTE IT</span>
+                   <span className={`text-[8px] md:text-[11px] font-black uppercase tracking-[0.2em] ${isDark ? 'text-indigo-400/60' : 'text-indigo-600/60'}`}>Strategic Partner</span>
+                   <span className={`text-sm md:text-lg font-black transition-colors ${isDark ? 'text-slate-400 group-hover:text-white' : 'text-slate-500 group-hover:text-slate-900'}`}>NEXTBYTE IT</span>
                  </div>
-                 <div className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all ${isDark ? 'bg-white/5 border-white/10 text-slate-500 group-hover:text-indigo-400 group-hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-400 group-hover:text-indigo-600 group-hover:border-indigo-600/50'}`}>
-                   <ExternalLink size={18} />
+                 <div className={`w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl border-2 flex items-center justify-center transition-all ${isDark ? 'bg-white/5 border-white/10 text-slate-500 group-hover:text-indigo-400 group-hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-400 group-hover:text-indigo-600 group-hover:border-indigo-600/50'}`}>
+                   <ExternalLink size={18} className="w-5 h-5 md:w-6 md:h-6" />
                  </div>
                </a>
             </div>
          </div>
-         <p className={`text-[10px] font-black uppercase tracking-[0.5em] mt-8 select-none ${isDark ? 'text-slate-800' : 'text-slate-200'}`}>Professional Design System — 2026</p>
+         <p className={`text-[8px] md:text-[10px] font-black uppercase tracking-[0.5em] mt-8 select-none ${isDark ? 'text-slate-800' : 'text-slate-200'}`}>Professional Design System — 2026</p>
       </footer>
 
       {/* Code Verification Modal */}
@@ -634,7 +641,7 @@ export default function App() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className={`w-full max-w-[400px] border rounded-[2.5rem] p-10 relative shadow-3xl ${isDark ? 'bg-zinc-950 border-white/10' : 'bg-white border-slate-200'}`}
+              className={`w-full max-w-[400px] border rounded-[2.5rem] p-8 md:p-10 relative shadow-3xl ${isDark ? 'bg-zinc-950 border-white/10' : 'bg-white border-slate-200'}`}
             >
               <button 
                 onClick={() => setShowCodeModal(false)}
@@ -694,12 +701,18 @@ export default function App() {
           >
             <div className="absolute top-10 w-full flex flex-col items-center">
                <Loader2 className="animate-spin text-white/20 mb-4" size={32} />
-               <h3 className="text-white text-[10px] font-black uppercase tracking-[0.4em]">Generating Presentation...</h3>
+               <h3 className="text-white text-[10px] font-black uppercase tracking-[0.4em] mb-4">Generating Presentation...</h3>
+               <button 
+                onClick={() => setIsExporting(false)}
+                className="px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-[9px] font-black text-white uppercase tracking-widest transition-all"
+               >
+                 Cancel Export
+               </button>
             </div>
 
             <div 
               ref={showcaseRef}
-              className={`w-full max-w-[1200px] aspect-[16/9] flex items-center justify-center relative rounded-[4rem] overflow-hidden transition-colors ${isDark ? 'bg-black' : 'bg-white'}`}
+              className={`fixed top-[-9999px] left-[-9999px] w-[1200px] h-[675px] flex items-center justify-center relative overflow-hidden transition-colors ${isDark ? 'bg-black text-white' : 'bg-white text-black'}`}
             >
               <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: `radial-gradient(circle at 50% 50%, ${theme.palette.primary} 0%, transparent 70%)` }}></div>
               
