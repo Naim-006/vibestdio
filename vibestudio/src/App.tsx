@@ -314,13 +314,7 @@ export default function App() {
             {isDark ? <Sparkles size={16} className="md:w-5 md:h-5" /> : <Moon size={16} className="md:w-5 md:h-5" />}
           </button>
 
-          <button 
-            onClick={handleExportClick}
-            className={`px-3 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-[0.15em] transition-all shadow-xl active:scale-95 flex items-center gap-1.5 md:gap-2 ${isDark ? 'bg-indigo-600 text-white hover:bg-white hover:text-black shadow-indigo-500/10' : 'bg-slate-900 text-white hover:bg-indigo-600 shadow-slate-200'}`}
-          >
-            <Download size={12} className="md:w-3.5 md:h-3.5" />
-            <span>Export</span>
-          </button>
+         
         </div>
       </nav>
 
